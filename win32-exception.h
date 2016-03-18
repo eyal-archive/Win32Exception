@@ -40,14 +40,14 @@ namespace Yalla
 		///	Returns a string that may be used to identify the exception.
 		/// </summary>
 		/// <return> A string that may be used to identify the exception. </return>
-		EXPORT std::wstring message() const noexcept;
+		EXPORT virtual wchar_t const* message() const noexcept;
 
 		/// <summary>
 		///	Returns a string that may be used to identify the exception.
 		/// </summary>
 		/// <param name = "languageId"> A language identifier. < / param>
 		/// <return> A string that may be used to identify the exception. </return>
-		EXPORT std::wstring message(DWORD languageId) const noexcept;
+		EXPORT wchar_t const* message(DWORD languageId) const noexcept;
 	private:
 		const DWORD _errorCode;
 	};

@@ -21,14 +21,14 @@ namespace Yalla
 		return ToChar::from(msg);
 	}
 
-	std::wstring Win32Exception::message() const noexcept
+	wchar_t const* Win32Exception::message() const noexcept
 	{
-		DWORD languageId = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
+		DWORD languageId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
 
 		return message(languageId);
 	}
 
-	std::wstring Win32Exception::message(DWORD languageId) const noexcept
+	wchar_t const* Win32Exception::message(DWORD languageId) const noexcept
 	{
 		DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER;
 
@@ -40,9 +40,11 @@ namespace Yalla
 
 		if (length == 0)
 		{
-			std::wstring errorCode = std::to_wstring(GetLastError());
+			std::wstring formatMessageErrCode = std::to_wstring(GetLastError());
 
-			message = L"Cannot get the error message. FormatMessage failed with code '" + errorCode + L"'.";
+			std::wstring formatMessageFailedForErrCode = std::to_wstring(_errorCode);
+
+			message = L"FormatMessage failed with code '" + formatMessageErrCode + L"'.\r\n\r\nFormatMessage failed to reterive the Win32 error message for code '" + formatMessageFailedForErrCode + L"'.";
 		}
 		else
 		{
@@ -51,7 +53,7 @@ namespace Yalla
 			LocalFree(buffer);
 		}
 
-		return message;
+		return ToWideChar::from(message);
 	}
 }
 
